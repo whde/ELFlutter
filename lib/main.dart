@@ -69,7 +69,6 @@ class _LoginPageState extends State <LoginPage> {
           new MaterialPageRoute(
               builder: (context) => new TabScreen()
           ), (route) => route == null);
-//      Navigator.push(context, new MaterialPageRoute(builder: (context) => new TabScreen()));
     }
   }
 

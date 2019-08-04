@@ -4,6 +4,8 @@ import './CourseCell.dart';
 import './CourseModel.dart';
 import './ExamCell.dart';
 import './ExamModel.dart';
+import './ExamList.dart';
+import './CourseList.dart';
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
 
@@ -16,36 +18,38 @@ class _HomeSate extends State <Home> {
 
   }
   void _allCourse(){
-
+    Navigator.push(context, new CupertinoPageRoute(builder: (context)=>new CourseList()));
   }
 
   void _jdcs(){
-
+    Navigator.push(context, new CupertinoPageRoute(builder: (context)=>new ExamList(title:  '阶段测试',)));
   }
   void _zxxl(){
-
+    Navigator.push(context, new CupertinoPageRoute(builder: (context)=>new ExamList(title:  '专项训练',)));
   }
   void _tbxl(){
-    showCupertinoDialog(context: context, builder: (BuildContext contex){
-      return CupertinoAlertDialog(
-        title: Text('提示'),
-        content: Text('同步训练'),
-        actions: <Widget>[
-          CupertinoDialogAction(
-            child: Text("取消"),
-            onPressed: () {
-              print("取消");
-            },
-          ),
-          CupertinoDialogAction(
-            child: Text("确定"),
-            onPressed: () {
-              print("确定");
-            },
-          ),
-        ],
-      );
-    });
+    Navigator.push(context, new CupertinoPageRoute(builder: (context)=>new ExamList(title:  '同步训练',)));
+
+//    showCupertinoDialog(context: context, builder: (BuildContext contex){
+//      return CupertinoAlertDialog(
+//        title: Text('提示'),
+//        content: Text('同步训练'),
+//        actions: <Widget>[
+//          CupertinoDialogAction(
+//            child: Text("取消"),
+//            onPressed: () {
+//              print("取消");
+//            },
+//          ),
+//          CupertinoDialogAction(
+//            child: Text("确定"),
+//            onPressed: () {
+//              print("确定");
+//            },
+//          ),
+//        ],
+//      );
+//    });
   }
 
   List<CourseModel> courseData = [];
@@ -73,11 +77,24 @@ class _HomeSate extends State <Home> {
     });
   }
 
-  Widget getCourseRow(int i) {
+  Widget _buildCourse() {
+    List<Widget> course = [];
+    Widget content;
+
+    for (int i=0;i<courseData.length;i++){
+      course.add(_getCourseRow(i));
+    }
+    content = Column(
+      children: course,
+    );
+    return content;
+  }
+
+  Widget _getCourseRow(int i) {
     CourseModel model = courseData[i];
     return GestureDetector(
       child: Padding(
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(0.0),
         child: CourseCell(
           cover: model.url,
           name: model.name,
@@ -87,18 +104,29 @@ class _HomeSate extends State <Home> {
         ),
       ),
       onTap: () {
-        setState(() {
-          print('row $i');
-        });
+        print('row $i');
       },
     );
   }
-  Widget getExamRow(int i) {
-    ExamModel model = newData[i];
 
+
+  Widget _buildExam() {
+    List<Widget> exam = [];
+    Widget content;
+
+    for (int i=0;i<newData.length;i++){
+      exam.add(_getExamRow(i));
+    }
+    content = Column(
+      children: exam,
+    );
+    return content;
+  }
+  Widget _getExamRow(int i) {
+    ExamModel model = newData[i];
     return GestureDetector(
       child: Padding(
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(0.0),
         child: ExamCell(
           name: model.name,
           score: model.score,
@@ -106,9 +134,7 @@ class _HomeSate extends State <Home> {
         ),
       ),
       onTap: () {
-        setState(() {
-          print('row $i');
-        });
+        print('row $i');
       },
     );
   }
@@ -121,93 +147,84 @@ class _HomeSate extends State <Home> {
         middle: Text('首页'),
       ),
       child: SafeArea(
-        child: Container(
-          color: Color.fromRGBO(236, 236, 236, 1),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                color: Color.fromRGBO(236, 236, 236, 0),
-                padding: EdgeInsets.only(top: 10),
-                child: Column(
-                  children: <Widget>[
-                    _Header(
-                      icon: 'images/home_fzks.png',
-                      title: '仿真考试',
-                      rightTitle: '练习记录',
-                      onRightPressed: _history,
-                    ),
-                    Container(
-                      color: Color.fromRGBO(255, 255, 255, 1),
-                      padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          _Category(icon: 'images/home_jdcs.png', title: '阶段测试', onPressed: _jdcs),
-                          _Category(icon: 'images/home_zxxl.png', title: '专项训练', onPressed: _zxxl),
-                          _Category(icon: 'images/home_tbxl.png', title: '同步训练', onPressed: _tbxl),
-                        ],
+        child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints viewportConstraints) {
+              return SingleChildScrollView(
+                child: Container(
+                  color: Color.fromRGBO(236, 236, 236, 1),
+                  constraints: BoxConstraints(
+                    minHeight: viewportConstraints.maxHeight,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        color: Color.fromRGBO(236, 236, 236, 0),
+                        padding: EdgeInsets.only(top: 10),
+                        child: Column(
+                          children: <Widget>[
+                            _Header(
+                              icon: 'images/home_fzks.png',
+                              title: '仿真考试',
+                              rightTitle: '练习记录',
+                              onRightPressed: _history,
+                            ),
+                            Container(
+                              color: Color.fromRGBO(255, 255, 255, 1),
+                              padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+                                  _Category(icon: 'images/home_jdcs.png', title: '阶段测试', onPressed: _jdcs),
+                                  _Category(icon: 'images/home_zxxl.png', title: '专项训练', onPressed: _zxxl),
+                                  _Category(icon: 'images/home_tbxl.png', title: '同步训练', onPressed: _tbxl),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                color: Color.fromRGBO(236, 236, 236, 0),
-                padding: EdgeInsets.only(top: 10),
-                child: Column(
-                  children: <Widget>[
-                    _Header(
-                      icon: 'images/home_wdkc.png',
-                      title: '我的课程',
-                      rightTitle: '所有课程',
-                      onRightPressed: _allCourse,
-                    ),
-                    Container(
-                      padding: EdgeInsets.zero,
-                      constraints: BoxConstraints(
-                        maxHeight: 200,
+                      Container(
+                        color: Color.fromRGBO(236, 236, 236, 0),
+                        padding: EdgeInsets.only(top: 10),
+                        child: Column(
+                          children: <Widget>[
+                            _Header(
+                              icon: 'images/home_wdkc.png',
+                              title: '我的课程',
+                              rightTitle: '所有课程',
+                              onRightPressed: _allCourse,
+                            ),
+                            Container(
+                              padding: EdgeInsets.zero,
+                              color: Color.fromRGBO(255, 255, 255, 1),
+                              child: _buildCourse(),
+                            )
+                          ],
+                        ),
                       ),
-                      color: Color.fromRGBO(255, 255, 255, 1),
-                      child: ListView.builder(
-                        itemCount: courseData.length,
-                        itemBuilder: (BuildContext context, int position) {
-                          return getCourseRow(position);
-                        },
+                      Container(
+                        color: Color.fromRGBO(236, 236, 236, 0),
+                        padding: EdgeInsets.only(top: 10),
+                        child: Column(
+                            children: <Widget>[
+                              _Header(
+                                icon: 'images/home_zxsj.png',
+                                title: '最新资源',
+                              ),
+                              Container(
+                                color: Color.fromRGBO(255, 255, 255, 1),
+                                padding: EdgeInsets.zero,
+                                child: _buildExam(),
+                              ),
+                            ]
+                        ),
                       )
-                      ,
-                    )
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                color: Color.fromRGBO(236, 236, 236, 0),
-                padding: EdgeInsets.only(top: 10),
-                child: Column(
-                  children: <Widget>[
-                    _Header(
-                      icon: 'images/home_zxsj.png',
-                      title: '最新资源',
-                    ),
-                    Container(
-                      height: 100,
-                      color: Color.fromRGBO(255, 255, 255, 1),
-                      padding: EdgeInsets.zero,
-                      constraints: BoxConstraints(
-                        minHeight: 200,
-                      ),
-                      child: ListView.builder(
-                        itemCount: newData.length,
-                        itemBuilder: (BuildContext context, int position) {
-                          return getExamRow(position);
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
+              );
+            }
         ),
       ),
     );
