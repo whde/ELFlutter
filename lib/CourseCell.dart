@@ -95,6 +95,7 @@ class _CourseCellState extends State <CourseCell> {
           Container(
             width: 55,
             height: 30,
+            alignment: Alignment.center,
             padding: EdgeInsets.zero,
             decoration: BoxDecoration(
               border: new Border.all(width: 0.5, color: Color.fromRGBO(253,111,82,1)),

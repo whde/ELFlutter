@@ -100,7 +100,8 @@ class _ExamCellState extends State <ExamCell> {
           width: 55,
           height: 30,
           padding: EdgeInsets.zero,
-          decoration: BoxDecoration(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
             border: new Border.all(width: 0.5, color: Color.fromRGBO(253,111,82,1)),
             borderRadius: new BorderRadius.all(new Radius.circular(4.0)),
           ),
